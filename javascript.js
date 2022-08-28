@@ -45,8 +45,8 @@ function game() {
             console.log(`It's a tie.  Computer has ${computerScore} and you have ${playerScore}`);
         }
 
-
     }
+    alert(`We've completed all five rounds.  \nThe final score is: \nYou: ${playerScore} \nComputer: ${computerScore}`);
 }
 
 game();
