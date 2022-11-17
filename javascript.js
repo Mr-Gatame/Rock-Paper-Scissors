@@ -1,52 +1,65 @@
 let playerScore = 0;
 let computerScore = 0;
+const options = ["Rock", "Paper", "Scissors"];
+const results = document.querySelector('.results');
+const scoreboard = document.querySelector('.scoreboard');
 
-let options = ["Rock", "Paper", "Scissors"];
+scoreboard.setAttribute('align', 'center');
+
 
 
 function getComputerChoice() {
-    let randChoice = options[Math.floor(Math.random() * options.length)];
-    return randChoice;
+    return options[Math.floor(Math.random() * options.length)];
 }
+
+const computerSelection = getComputerChoice();
+
+const selectionButtons = document.querySelectorAll('[data-selection]');
+
+selectionButtons.forEach(selectionButton => {
+    selectionButton.addEventListener('click', e => {
+        const selectionName = selectionButton.dataset.selection;
+        let computerSelection = getComputerChoice();
+        playRound(selectionName, computerSelection);
+
+        if (computerScore === 5) {
+            alert(`YOU LOSE!\n Computer has made it to 5 points, leaving you with only ${playerScore}.\n Good Game.`);
+        } else if (playerScore === 5) {
+            alert(`YOU WIN!\n You made it to 5 points and the computer only has ${computerScore}.\n Well played.`);
+        }
+    })
+})
+
+
+
+
+
 
 function playRound(playerSelection, computerSelection) {
 
+
     if (playerSelection === computerSelection) {
-        return 0;
-    } else if (playerSelection === "Rock" && computerSelection === "Scissors" || playerSelection === "Scissors" && computerSelection === "Paper" || playerSelection === "Paper" && computerSelection === "Rock") {
-        return 1;
+        computerScore += 0;
+        results.textContent = `It's a tie. Score remains the same.`;
+        scoreboard.textContent = `Player has ${playerScore} points. \n Computer has ${computerScore}.`;
+    } else
+    if (playerSelection === "Rock" && computerSelection === "Scissors" || playerSelection === "Scissors" && computerSelection === "Paper" || playerSelection === "Paper" && computerSelection === "Rock") {
+        playerScore++;
+        results.textContent = `You win! ${playerSelection} beats ${computerSelection}.`;
+        scoreboard.textContent = `Player has ${playerScore} points. \n Computer has ${computerScore}.`;
     } else if (playerSelection != "Rock" && playerSelection != "Paper" && playerSelection != "Scissors") {
-        return `You need to enter either Rock, Paper, or Scissors.`;
+        console.log(`You need to enter either Rock, Paper, or Scissors.`)
     } else {
-        return 2;
+        computerScore++;
+        results.textContent = `You lose! ${computerSelection} beats ${playerSelection}.`;
+        scoreboard.textContent = `Player has ${playerScore} points. \n Computer has ${computerScore}.`;
     }
+
+    // if (computerScore === 5) {
+    //     alert(`YOU LOSE!\n Computer has made it to 5 points, leaving you with only ${playerScore}.\n Good Game.`)
+    //     return;
+    // } else if (playerScore === 5) {
+    //     alert(`YOU WIN!\n You made it to 5 points and the computer only has ${computerScore}.\n Well played.`);
+    //     return;
+    // }
 }
-
-
-
-function game() {
-
-    for (let i = 0; i < 5; i++) {
-        let guess = prompt("Rock, Paper, or Scissors?");
-        let playerSelection = guess.charAt(0).toUpperCase() + guess.slice(1).toLowerCase();
-        let computerSelection = getComputerChoice();
-        let result = playRound(playerSelection, computerSelection);
-
-        playRound(playerSelection, computerSelection);
-
-        if (result === 1) {
-            playerScore++;
-            console.log(`You win! ${playerSelection} beats ${computerSelection}. \nYou have ${playerScore} points and Computer has ${computerScore} points.`)
-        } else if (result === 2) {
-            computerScore++;
-            console.log(`You lose! ${computerSelection} beats ${playerSelection}. \nYou have ${playerScore} points and Computer has ${computerScore} points.`);
-        } else if (result === 0) {
-            computerScore += 0;
-            console.log(`It's a tie.  Computer has ${computerScore} and you have ${playerScore}`);
-        }
-
-    }
-    alert(`We've completed all five rounds.  \nThe final score is: \nYou: ${playerScore} \nComputer: ${computerScore}`);
-}
-
-game();
